@@ -30,9 +30,15 @@ class TaskTrackerPy():
                 t["status"] = status; print(f"Task '{task}' status updated to '{status}'") if status in self.allowed_states else print(f"Invalid status {status}") 
         print(self.tasks)
         return self.tasks
+    
+    def to_json(self, filename):
+        filename = str(filename).lower() + ".json"
+        with open(filename, mode="w", encoding="utf-8") as write_file:
+            json.dump(self.tasks, write_file)
 
 if __name__ == "__main__":
     tt = TaskTrackerPy()
     tt.add("Build Task Tracker")
     # tt.remove("Build Task")
     tt.update_status("Build Task Tracker", "complete")
+    tt.to_json("task_register")
