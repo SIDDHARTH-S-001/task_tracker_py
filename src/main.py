@@ -11,6 +11,19 @@ class TaskTrackerPy():
         self.tasks.append(task)
         print(f"Added '{task['name']}' to the registry, its ID is {task['task_id']}")
 
+    def remove(self, task):
+        print(len(self.tasks))
+        if len(self.tasks) > 0:
+            for i in range(len(self.tasks)):
+                assert self.tasks[i]["name"] == str(task).lower(), f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents"
+                self.tasks.pop(i)
+                print(f"Removed task '{task}' from the registry")
+                print(len(self.tasks))
+        else:
+            print(f"Registry is empty")
+        return self.tasks
+
 if __name__ == "__main__":
     tt = TaskTrackerPy()
     tt.add("Build Task Tracker")
+    tt.remove("Build Task")
