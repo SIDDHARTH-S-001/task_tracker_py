@@ -3,8 +3,8 @@ import json
 class TaskTrackerPy():
     def __init__(self):
         self.tasks = []
-        self.default_status = "active"
-        self.allowed_states = ("active", "complete")
+        self.default_status = "planned"
+        self.allowed_states = ("planned", "active", "complete")
 
     def add(self, task):
         task = dict(task_id=len(self.tasks) , name=str(task).lower(), status=self.default_status)
