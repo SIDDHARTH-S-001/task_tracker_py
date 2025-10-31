@@ -5,9 +5,10 @@ class TaskTrackerPy():
         self.tasks = []
         self.default_status = "planned"
         self.allowed_states = ("planned", "active", "complete")
+        self.default_description = ""
 
-    def add(self, task):
-        task = dict(task_id=len(self.tasks) , name=str(task).lower(), status=self.default_status)
+    def add(self, task, description):
+        task = dict(task_id=len(self.tasks) , name=str(task).lower(), status=self.default_status, description=description)
         self.tasks.append(task)
         print(f"Added '{task['name']}' to the registry, its ID is {task['task_id']}")
 
@@ -29,7 +30,7 @@ class TaskTrackerPy():
                 assert t["name"] == str(task).lower(), f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents"
                 t["status"] = status; print(f"Task '{task}' status updated to '{status}'") if status in self.allowed_states else print(f"Invalid status {status}") 
         print(self.tasks)
-        return self.tasks
+        return self.tasksmain
     
     def to_json(self, filename):
         filename = str(filename).lower() + ".json"
@@ -38,7 +39,7 @@ class TaskTrackerPy():
 
 if __name__ == "__main__":
     tt = TaskTrackerPy()
-    tt.add("Build Task Tracker")
+    tt.add("Build Task Tracker", "Building a basic task registry program.")
     # tt.remove("Build Task")
-    tt.update_status("Build Task Tracker", "complete")
+    # tt.update_status("Build Task Tracker", "complete")
     tt.to_json("task_register")
