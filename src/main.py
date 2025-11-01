@@ -1,4 +1,5 @@
 import json
+import datetime
 
 class TaskTrackerPy():
     def __init__(self):
@@ -35,6 +36,13 @@ class TaskTrackerPy():
                 self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
         return self.all_tasks
     
+    def process_datetime(self):
+        date_time = datetime.datetime.now()
+        date = date_time.strftime("%x")
+        time = date_time.strftime("%X")
+        date_time = str(time) + " - "+ str(date)
+        return date_time
+    
     def to_json(self, filename):
         filename = str(filename).lower() + ".json"
         contents = [self.all_tasks, self.planned, self.active, self.complete]
@@ -43,7 +51,9 @@ class TaskTrackerPy():
 
 if __name__ == "__main__":
     tt = TaskTrackerPy()
-    tt.add("Build Task Tracker", "Building a basic task registry program.")
-    tt.update_status("Build Task Tracker", "active")
-    tt.remove("Build Task Tracker")
-    tt.to_json("task_register")
+    # tt.add("Build Task Tracker", "Building a basic task registry program.")
+    # tt.update_status("Build Task Tracker", "active")
+    # tt.remove("Build Task Tracker")
+    # tt.to_json("task_register")
+    dt = tt.process_datetime()
+    print(dt)
