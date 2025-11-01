@@ -9,7 +9,7 @@ class TaskTrackerPy():
         self.default_description = ""
 
     def add(self, task, description):
-        task = dict(task_id=len(self.all_tasks) , name=str(task).lower(), status=self.default_status, description=description)
+        task = dict(task_id=len(self.all_tasks) , name=str(task).lower(), status=self.default_status, description=description, create_time=self.process_datetime(), update_time=self.process_datetime())
         self.all_tasks.append(task); self.planned.append(task)
         print(f"Added '{task['name']}' to the registry, its ID is {task['task_id']}")
 
@@ -31,6 +31,7 @@ class TaskTrackerPy():
                 assert self.all_tasks[i]["name"] == str(task).lower(), f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents"
                 prev_status = self.all_tasks[i]["status"]
                 self.all_tasks[i]["status"] = status; print(f"Task '{task}' status updated to '{status}'") if status in self.allowed_states else print(f"Invalid status {status}") 
+                self.all_tasks[i]["update_time"] = self.process_datetime()
                 t = self.all_tasks[i]
                 self.planned.pop(i) if prev_status=="planned" else self.active.pop(i) if prev_status=="active" else self.complete.pop(i) if prev_status=="complete" else None
                 self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
@@ -51,9 +52,9 @@ class TaskTrackerPy():
 
 if __name__ == "__main__":
     tt = TaskTrackerPy()
-    # tt.add("Build Task Tracker", "Building a basic task registry program.")
-    # tt.update_status("Build Task Tracker", "active")
+    tt.add("Build Task Tracker", "Building a basic task registry program.")
+    tt.update_status("Build Task Tracker", "active")
     # tt.remove("Build Task Tracker")
-    # tt.to_json("task_register")
-    dt = tt.process_datetime()
-    print(dt)
+    tt.to_json("task_register")
+    # dt = tt.process_datetime()
+    # print(dt)
