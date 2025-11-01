@@ -132,18 +132,23 @@ class TaskTrackerPy():
             self.update_status(args.arg1, args.arg2)        
         current_data = self.memory()
         all_data, planned, active, complete = current_data[0], current_data[1], current_data[2], current_data[3]
+        allowed_show_args = ("all", "planned", "active", "complete")
         if args.command=="show":
-            match args.arg1:
-                case "all":
-                    self.format_output(all_data, "all")
-                case "planned":
-                    self.format_output(planned, "planned")
-                case "active":
-                    self.format_output(active, "active")
-                case "complete":
-                    self.format_output(complete, "complete")
-                case _:
-                    self.format_output(all_data, "all")
+            if args.arg1 not in allowed_show_args:
+                print(f"Invalid argument {args.arg1}, allowed args {allowed_show_args}")
+                return
+            else:
+                match args.arg1:
+                    case "all":
+                        self.format_output(all_data, "all")
+                    case "planned":
+                        self.format_output(planned, "planned")
+                    case "active":
+                        self.format_output(active, "active")
+                    case "complete":
+                        self.format_output(complete, "complete")
+                    case _:
+                        self.format_output(all_data, "all")
 
     def to_json(self, filename):
         contents = [self.all_tasks, self.planned, self.active, self.complete]
