@@ -70,15 +70,15 @@ class TaskTrackerPy():
                     if prev_status=="planned":
                         for j in range(len(self.planned)):
                             if self.planned[j]["name"] == str(task).lower():
-                                self.planned.pop(j)
+                                self.planned.pop(j); break
                     elif prev_status=="active":
                         for j in range(len(self.active)):
                             if self.active[j]["name"] == str(task).lower():
-                                self.active.pop(j) 
+                                self.active.pop(j); break
                     elif prev_status=="complete":
                         for j in range(len(self.complete)):
                             if self.complete[j]["name"] == str(task).lower():
-                                self.complete.pop(j) 
+                                self.complete.pop(j); break
                     self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
                     break
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
