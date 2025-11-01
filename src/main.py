@@ -19,14 +19,28 @@ class TaskTrackerPy():
 
     def remove(self, task):
         self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
+        print(len(self.all_tasks))
         if len(self.all_tasks) > 0:
             for i in range(len(self.all_tasks)):
                 if self.all_tasks[i]["name"] == str(task).lower():
                     task_status = self.all_tasks[i]["status"]
                     print(task_status)
                     self.all_tasks.pop(i)
-                    self.planned.pop(i) if task_status=="planned" else self.active.pop(i) if task_status=="active" else self.complete.pop(i) if task_status=="complete" else None
+                    # self.planned.pop(i) if task_status=="planned" else self.active.pop(i) if task_status=="active" else self.complete.pop(i) if task_status=="complete" else None
+                    if task_status=="planned":
+                        for j in range(len(self.planned)):
+                            if self.planned[j]["name"] == str(task).lower():
+                                self.planned.pop(j)
+                    elif task_status=="active":
+                        for j in range(len(self.active)):
+                            if self.active[j]["name"] == str(task).lower():
+                                self.active.pop(j) 
+                    elif task_status=="complete":
+                        for j in range(len(self.complete)):
+                            if self.complete[j]["name"] == str(task).lower():
+                                self.complete.pop(j) 
                     print(f"Removed task '{task}' from the registry") 
+                    break
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
                     print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
             self.to_json(self.filename)
@@ -58,6 +72,7 @@ class TaskTrackerPy():
                             if self.complete[j]["name"] == str(task).lower():
                                 self.complete.pop(j) 
                     self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
+                    break
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
                     print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
             self.to_json(self.filename)
