@@ -41,7 +41,7 @@ class TaskTrackerPy():
                     print(f"Removed task '{task}' from the registry") 
                     break
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
-                    print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
+                    print(f"The requested task {task} doesn't exist in the registry, verify registry contents")
             self.to_json(self.filename)
         else:
             print(f"Registry is empty")
@@ -53,6 +53,9 @@ class TaskTrackerPy():
             for i in range(len(self.all_tasks)):
                 if self.all_tasks[i]["name"] == str(task).lower(): 
                     prev_status = self.all_tasks[i]["status"]
+                    if status == prev_status:
+                        print(f"The requested task {task} is already in the requested '{status}' status")
+                        break
                     self.all_tasks[i]["status"] = status; print(f"Task '{task}' status updated to '{status}'") if status in self.allowed_states else print(f"Invalid status {status}") 
                     self.all_tasks[i]["update_time"] = self.process_datetime()
                     t = self.all_tasks[i]
@@ -71,7 +74,7 @@ class TaskTrackerPy():
                     self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
                     break
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
-                    print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
+                    print(f"The requested task {task} doesn't exist in the registry, verify registry contents")
             self.to_json(self.filename)
         else:
             print(f"Invalid status {status}, it must be one of {self.allowed_states}")
