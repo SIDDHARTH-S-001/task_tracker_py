@@ -24,20 +24,16 @@ class TaskTrackerPy():
         print(f"Added '{task['name']}' to the registry, its ID is {task['task_id']}")
 
     def remove(self, task):
-        print("started remove function")
         self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
         if len(self.all_tasks) > 0:
             for i in range(len(self.all_tasks)):
                 if self.all_tasks[i]["name"] == str(task).lower():
                     task_status = self.all_tasks[i]["status"]
-                    print(task_status)
                     self.all_tasks.pop(i)
-                    print("removed from all list")
                     if task_status=="planned":
                         for j in range(len(self.planned)):
                             if self.planned[j]["name"] == str(task).lower():
-                                self.planned.pop(j)
-                                print("removed from planned list"); break
+                                self.planned.pop(j); break
                     elif task_status=="active":
                         for j in range(len(self.active)):
                             if self.active[j]["name"] == str(task).lower():
@@ -105,7 +101,7 @@ class TaskTrackerPy():
             self.memory()
     
     def format_output(self, task_list, list_type):
-        print(f"----- List of {str(list_type).lower()} task -----")
+        print(f"----- List of {str(list_type).lower()} tasks -----")
         for t in task_list:
             task_id, task_name, task_status, task_description, createAt, updateAt = t["task_id"], t["name"], t["status"], t["description"], t["create_time"], t["update_time"]
             print("\nID: ", task_id)
