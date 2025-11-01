@@ -11,20 +11,21 @@ class TaskTrackerPy():
         self.filename = str(filename).lower() + ".json"
 
     def add(self, task, description):
-        self.all_tasks = self.memory()[0]
+        self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
         task = dict(task_id=len(self.all_tasks) , name=str(task).lower(), status=self.default_status, description=description, create_time=self.process_datetime(), update_time=self.process_datetime())
         self.all_tasks.append(task); self.planned.append(task)
         self.to_json(self.filename)
         print(f"Added '{task['name']}' to the registry, its ID is {task['task_id']}")
 
     def remove(self, task):
-        self.all_tasks = self.memory()[0]
+        self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
         if len(self.all_tasks) > 0:
             for i in range(len(self.all_tasks)):
                 if self.all_tasks[i]["name"] == str(task).lower():
                     task_status = self.all_tasks[i]["status"]
+                    print(task_status)
                     self.all_tasks.pop(i)
-                    # self.planned.pop(i) if task_status=="planned" else self.active.pop(i) if task_status=="active" else self.complete.pop(i) if task_status=="complete" else None
+                    self.planned.pop(i) if task_status=="planned" else self.active.pop(i) if task_status=="active" else self.complete.pop(i) if task_status=="complete" else None
                     print(f"Removed task '{task}' from the registry") 
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
                     print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
@@ -34,8 +35,8 @@ class TaskTrackerPy():
         return self.all_tasks
 
     def update_status(self, task, status):
-        self.all_tasks = self.memory()[0]
-        if len(self.all_tasks) > 0:
+        self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
+        if len(self.all_tasks) > 0 and status in self.allowed_states:
             for i in range(len(self.all_tasks)):
                 # This line below will be an issue when multiple entries are added.
                 if self.all_tasks[i]["name"] == str(task).lower(): 
@@ -44,10 +45,24 @@ class TaskTrackerPy():
                     self.all_tasks[i]["update_time"] = self.process_datetime()
                     t = self.all_tasks[i]
                     # self.planned.pop(i) if prev_status=="planned" else self.active.pop(i) if prev_status=="active" else self.complete.pop(i) if prev_status=="complete" else None
-                    # self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
+                    if prev_status=="planned":
+                        for j in range(len(self.planned)):
+                            if self.planned[j]["name"] == str(task).lower():
+                                self.planned.pop(j)
+                    elif prev_status=="active":
+                        for j in range(len(self.active)):
+                            if self.active[j]["name"] == str(task).lower():
+                                self.active.pop(j) 
+                    elif prev_status=="complete":
+                        for j in range(len(self.complete)):
+                            if self.complete[j]["name"] == str(task).lower():
+                                self.complete.pop(j) 
+                    self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
                     print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
             self.to_json(self.filename)
+        else:
+            print(f"Invalid status {status}, it must be one of {self.allowed_states}")
         return self.all_tasks
     
     def process_datetime(self):
