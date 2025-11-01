@@ -14,6 +14,10 @@ class TaskTrackerPy():
 
     def add(self, task, description):
         self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
+        for t in self.all_tasks:
+            if t["name"] == task:
+                print(f"The requested task {task} already exists in the registry")
+                return
         task = dict(task_id=len(self.all_tasks) , name=str(task).lower(), status=self.default_status, description=description, create_time=self.process_datetime(), update_time=self.process_datetime())
         self.all_tasks.append(task); self.planned.append(task)
         self.to_json(self.filename)
