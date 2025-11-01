@@ -26,7 +26,6 @@ class TaskTrackerPy():
                     task_status = self.all_tasks[i]["status"]
                     print(task_status)
                     self.all_tasks.pop(i)
-                    # self.planned.pop(i) if task_status=="planned" else self.active.pop(i) if task_status=="active" else self.complete.pop(i) if task_status=="complete" else None
                     if task_status=="planned":
                         for j in range(len(self.planned)):
                             if self.planned[j]["name"] == str(task).lower():
@@ -52,13 +51,11 @@ class TaskTrackerPy():
         self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
         if len(self.all_tasks) > 0 and status in self.allowed_states:
             for i in range(len(self.all_tasks)):
-                # This line below will be an issue when multiple entries are added.
                 if self.all_tasks[i]["name"] == str(task).lower(): 
                     prev_status = self.all_tasks[i]["status"]
                     self.all_tasks[i]["status"] = status; print(f"Task '{task}' status updated to '{status}'") if status in self.allowed_states else print(f"Invalid status {status}") 
                     self.all_tasks[i]["update_time"] = self.process_datetime()
                     t = self.all_tasks[i]
-                    # self.planned.pop(i) if prev_status=="planned" else self.active.pop(i) if prev_status=="active" else self.complete.pop(i) if prev_status=="complete" else None
                     if prev_status=="planned":
                         for j in range(len(self.planned)):
                             if self.planned[j]["name"] == str(task).lower():
