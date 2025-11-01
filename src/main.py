@@ -1,4 +1,5 @@
 import json
+import argparse
 import datetime
 
 class TaskTrackerPy():
@@ -44,6 +45,20 @@ class TaskTrackerPy():
         date_time = str(time) + " - "+ str(date)
         return date_time
     
+    def parse_cli(self):
+        parser = argparse.ArgumentParser(description="Task Registry")
+        parser.add_argument("-a", "--add", type=str, nargs="+",  help="Add task to registry, pass 2 string arguments for taskname & description")
+        parser.add_argument("-r", "--remove", type=str, nargs=1,  help="remove task from registry, pass 1 string argument for taskname")
+        parser.add_argument("-u", "--update", type=str, nargs=2,  help="Update task in registry, pass 2 string arguments for taskname & new status")
+        args = parser.parse_args()
+        print(args)
+        if args.add:
+            self.add(args.add[0], args.add[1] if len(args.add) > 1 else "")
+        if args.remove:
+            self.remove(args.remove[0])
+        if args.update:
+            self.update_status(args.update[0], args.update[1])
+    
     def to_json(self, filename):
         filename = str(filename).lower() + ".json"
         contents = [self.all_tasks, self.planned, self.active, self.complete]
@@ -52,9 +67,5 @@ class TaskTrackerPy():
 
 if __name__ == "__main__":
     tt = TaskTrackerPy()
-    tt.add("Build Task Tracker", "Building a basic task registry program.")
-    tt.update_status("Build Task Tracker", "active")
-    # tt.remove("Build Task Tracker")
+    tt.parse_cli()
     tt.to_json("task_register")
-    # dt = tt.process_datetime()
-    # print(dt)
