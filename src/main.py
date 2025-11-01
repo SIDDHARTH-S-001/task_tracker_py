@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+import os
 import json
 import argparse
 import datetime
@@ -83,9 +85,13 @@ class TaskTrackerPy():
         return date_time
     
     def memory(self):
-        with open(self.filename, mode="r", encoding="utf-8") as read_file:
-            current_data = json.load(read_file)      
-        return current_data
+        if os.path.exists(self.filename):
+            with open(self.filename, mode="r", encoding="utf-8") as read_file:
+                current_data = json.load(read_file)      
+                return current_data
+        else:
+            self.to_json(self.filename)
+            self.memory()
     
     def parse_cli(self):
         parser = argparse.ArgumentParser(description="Task Registry")
@@ -115,7 +121,7 @@ class TaskTrackerPy():
                     print(complete)
                 case _:
                     print(all_data)
-                    
+
     def to_json(self, filename):
         contents = [self.all_tasks, self.planned, self.active, self.complete]
         with open(filename, mode="w", encoding="utf-8") as write_file:
