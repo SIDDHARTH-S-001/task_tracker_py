@@ -21,11 +21,13 @@ class TaskTrackerPy():
         self.all_tasks = self.memory()[0]
         if len(self.all_tasks) > 0:
             for i in range(len(self.all_tasks)):
-                assert self.all_tasks[i]["name"] == str(task).lower(), f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents"
-                task_status = self.all_tasks[i]["status"]
-                self.all_tasks.pop(i)
-                self.planned.pop(i) if task_status=="planned" else self.active.pop(i) if task_status=="active" else self.complete.pop(i) if task_status=="complete" else None
-                print(print(f"Removed task '{task}' from the registry"))          
+                if self.all_tasks[i]["name"] == str(task).lower():
+                    task_status = self.all_tasks[i]["status"]
+                    self.all_tasks.pop(i)
+                    # self.planned.pop(i) if task_status=="planned" else self.active.pop(i) if task_status=="active" else self.complete.pop(i) if task_status=="complete" else None
+                    print(f"Removed task '{task}' from the registry") 
+                elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
+                    print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
             self.to_json(self.filename)
         else:
             print(f"Registry is empty")
