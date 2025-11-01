@@ -38,14 +38,16 @@ class TaskTrackerPy():
         if len(self.all_tasks) > 0:
             for i in range(len(self.all_tasks)):
                 # This line below will be an issue when multiple entries are added.
-                assert self.all_tasks[i]["name"] == str(task).lower(), f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents"
-                prev_status = self.all_tasks[i]["status"]
-                self.all_tasks[i]["status"] = status; print(f"Task '{task}' status updated to '{status}'") if status in self.allowed_states else print(f"Invalid status {status}") 
-                self.all_tasks[i]["update_time"] = self.process_datetime()
-                t = self.all_tasks[i]
-                self.planned.pop(i) if prev_status=="planned" else self.active.pop(i) if prev_status=="active" else self.complete.pop(i) if prev_status=="complete" else None
-                self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
-                self.to_json(self.filename)
+                if self.all_tasks[i]["name"] == str(task).lower(): 
+                    prev_status = self.all_tasks[i]["status"]
+                    self.all_tasks[i]["status"] = status; print(f"Task '{task}' status updated to '{status}'") if status in self.allowed_states else print(f"Invalid status {status}") 
+                    self.all_tasks[i]["update_time"] = self.process_datetime()
+                    t = self.all_tasks[i]
+                    # self.planned.pop(i) if prev_status=="planned" else self.active.pop(i) if prev_status=="active" else self.complete.pop(i) if prev_status=="complete" else None
+                    # self.planned.append(t) if status=="planned" else self.active.append(t) if status=="active" else self.complete.append(t) if status=="complete" else None
+                elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
+                    print(f"The requested task {task} doesn't exist in the registry. Run 'task-cli list' to verify registry contents")
+            self.to_json(self.filename)
         return self.all_tasks
     
     def process_datetime(self):
