@@ -10,4 +10,5 @@ For direct CLI run on python code, refer to [this commit](https://github.com/SID
 [Running Python scripts with CLI args](https://medium.com/@evaGachirwa/running-python-script-with-arguments-in-the-command-line-93dfa5f10eff) <br/>
 [JSON](https://realpython.com/python-json/#introducing-json) <br/>
 [Datetime](https://www.w3schools.com/python/python_datetime.asp) <br/>
+[Argparse](https://docs.python.org/3/howto/argparse.html) </br>
 [Creating README](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#headings) <br/>
