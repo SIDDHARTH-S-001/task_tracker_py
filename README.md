@@ -1,7 +1,8 @@
 # task_tracker_py
 This repository focuses on a  task tracking program, the backend runs python while commands operational on any linux system through CLI
 
-This project is a submission to [roadmap.sh](https://roadmap.sh/), and here's the [Project URL](https://roadmap.sh/projects/task-tracker).
+This project is a submission to [roadmap.sh](https://roadmap.sh/), here's the [Project URL](https://roadmap.sh/projects/task-tracker), and link to this [solution](https://roadmap.sh/projects/task-tracker/solutions?u=6904e2c9b0418a041edd8570) on readmap.sh
+
 
 ## Instructions of use
 Clone is repository through </br>
