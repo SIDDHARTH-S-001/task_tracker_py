@@ -24,28 +24,32 @@ class TaskTrackerPy():
         print(f"Added '{task['name']}' to the registry, its ID is {task['task_id']}")
 
     def remove(self, task):
+        print("started remove function")
         self.all_tasks, self.planned, self.active, self.complete = self.memory()[0], self.memory()[1], self.memory()[2], self.memory()[3]
         if len(self.all_tasks) > 0:
             for i in range(len(self.all_tasks)):
                 if self.all_tasks[i]["name"] == str(task).lower():
                     task_status = self.all_tasks[i]["status"]
+                    print(task_status)
                     self.all_tasks.pop(i)
+                    print("removed from all list")
                     if task_status=="planned":
                         for j in range(len(self.planned)):
                             if self.planned[j]["name"] == str(task).lower():
                                 self.planned.pop(j)
+                                print("removed from planned list"); break
                     elif task_status=="active":
                         for j in range(len(self.active)):
                             if self.active[j]["name"] == str(task).lower():
-                                self.active.pop(j) 
+                                self.active.pop(j); break
                     elif task_status=="complete":
                         for j in range(len(self.complete)):
                             if self.complete[j]["name"] == str(task).lower():
-                                self.complete.pop(j) 
-                    print(f"Removed task '{task}' from the registry") 
+                                self.complete.pop(j); break
                     break
                 elif self.all_tasks[i]["name"] != str(task).lower() and (i == len(self.all_tasks)-1):
                     print(f"The requested task {task} doesn't exist in the registry, verify registry contents")
+            print(f"Removed task '{task}' from the registry") 
             self.to_json(self.filename)
         else:
             print(f"Registry is empty")
@@ -114,22 +118,26 @@ class TaskTrackerPy():
 
     def parse_cli(self):
         parser = argparse.ArgumentParser(description="Task Registry")
-        parser.add_argument("-a", "--add", type=str, nargs="+",  help="Add task to registry, pass 2 string arguments for taskname & description")
-        parser.add_argument("-r", "--remove", type=str, nargs=1,  help="remove task from registry, pass 1 string argument for taskname")
-        parser.add_argument("-u", "--update", type=str, nargs=2,  help="Update task in registry, pass 2 string arguments for taskname & new status")
-        parser.add_argument("-s", "--show", choices=["all", "planned", "active", "complete"], default=None, help="Shows all the current tasks")
+        parser.add_argument("command", choices=["add", "remove", "update", "show"], help="Command to execute, pick one off [add, remove, update, show]")
+        parser.add_argument("arg1", nargs="?", help="For 'add', 'remove', 'update' & 'show' methods")
+        parser.add_argument("arg2", nargs="?", help="For 'add' & 'update' methods only")
         args = parser.parse_args()
-        if args.add:
-            self.add(args.add[0], args.add[1] if len(args.add) > 1 else "")
-        if args.remove:
-            self.remove(args.remove[0])
-        if args.update:
-            self.update_status(args.update[0], args.update[1])
-        
+        if args.command=="add":
+            if not args.arg1:
+                parser.error("'add' requires 'task name '& 'description' [optional]")
+            self.add(args.arg1, args.arg2 or "")
+        if args.command=="remove":
+            if not args.arg1:
+                parser.error("'remove' requires 'task name'")
+            self.remove(args.arg1)
+        if args.command=="update":
+            if not args.arg1:
+                parser.error("'update' requires 'task name'& 'status'")
+            self.update_status(args.arg1, args.arg2)        
         current_data = self.memory()
         all_data, planned, active, complete = current_data[0], current_data[1], current_data[2], current_data[3]
-        if args.show:
-            match args.show:
+        if args.command=="show":
+            match args.arg1:
                 case "all":
                     self.format_output(all_data, "all")
                 case "planned":
