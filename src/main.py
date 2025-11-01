@@ -93,6 +93,18 @@ class TaskTrackerPy():
             self.to_json(self.filename)
             self.memory()
     
+    def format_output(self, task_list, list_type):
+        print(f"----- List of {str(list_type).lower()} task -----")
+        for t in task_list:
+            task_id, task_name, task_status, task_description, createAt, updateAt = t["task_id"], t["name"], t["status"], t["description"], t["create_time"], t["update_time"]
+            print("\nID: ", task_id)
+            print("\nName: ", task_name)
+            print("\nStatus: ", task_status)
+            print("\nDesc : ", task_description)
+            print("\nCreated At: ", createAt)
+            print("\nUpdated At:", updateAt)
+            print("--------------------------------\n")
+
     def parse_cli(self):
         parser = argparse.ArgumentParser(description="Task Registry")
         parser.add_argument("-a", "--add", type=str, nargs="+",  help="Add task to registry, pass 2 string arguments for taskname & description")
@@ -112,15 +124,15 @@ class TaskTrackerPy():
         if args.show:
             match args.show:
                 case "all":
-                    print(all_data)
+                    self.format_output(all_data, "all")
                 case "planned":
-                    print(planned)
+                    self.format_output(planned, "planned")
                 case "active":
-                    print(active)
+                    self.format_output(active, "active")
                 case "complete":
-                    print(complete)
+                    self.format_output(complete, "complete")
                 case _:
-                    print(all_data)
+                    self.format_output(all_data, "all")
 
     def to_json(self, filename):
         contents = [self.all_tasks, self.planned, self.active, self.complete]
